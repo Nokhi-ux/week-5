@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+    <table border="1">
+        <!-- Display box at the very top -->
+        <tr>
+            <td colspan="4">
+                <input type="text" id="inputbox" value="0"/>
+            </td>
+        </tr>
+
+        <!-- Top function row -->
+        <tr>
+            <td class="operatorbutton" onclick="btnSqrtPressed()">√</td>
+            <td class="operatorbutton" onclick="digitBtnPressed('%')">%</td>
+            <td class="operatorbutton" onclick="bracketBtnPressed()">()</td>
+            <td class="ACbutton" onclick="btnACpressed()">AC</td>
+        </tr>
+
+        <!-- Digits and operators -->
+        <tr>
+            <td class="digitbutton" onclick="digitBtnPressed('7')">7</td>
+            <td class="digitbutton" onclick="digitBtnPressed('8')">8</td>
+            <td class="digitbutton" onclick="digitBtnPressed('9')">9</td>
+            <td class="operatorbutton" onclick="operatorBtnPressed('*')">*</td>
+        </tr>
+        <tr>
+            <td class="digitbutton" onclick="digitBtnPressed('4')">4</td>
+            <td class="digitbutton" onclick="digitBtnPressed('5')">5</td>
+            <td class="digitbutton" onclick="digitBtnPressed('6')">6</td>
+            <td class="operatorbutton" onclick="operatorBtnPressed('-')">-</td>
+        </tr>
+        <tr>
+            <td class="digitbutton" onclick="digitBtnPressed('1')">1</td>
+            <td class="digitbutton" onclick="digitBtnPressed('2')">2</td>
+            <td class="digitbutton" onclick="digitBtnPressed('3')">3</td>
+            <td class="operatorbutton" onclick="operatorBtnPressed('+')">+</td>
+        </tr>
+        <tr>
+            <td class="digitbutton" colspan="2" onclick="digitBtnPressed('0')">0</td>
+            <td class="operatorbutton" onclick="operatorBtnPressed('/')">/</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="operatorbutton" colspan="4" onclick="equalsBtnPressed()">=</td>
+        </tr>
+    </table>
+
+    <script>
+        var newline = true;
+        var bracketToggle = true; // for switching between ( and )
+
+        function digitBtnPressed(button) {
+            if (newline == true) {
+                document.getElementById("inputbox").value = button;
+                newline = false;
+            } else {
+                var currentvalue = document.getElementById("inputbox").value;
+                document.getElementById("inputbox").value = currentvalue + button;
+            }
+        }
+
+        function operatorBtnPressed(operator) {
+            var currentvalue = document.getElementById("inputbox").value;
+            document.getElementById("inputbox").value = currentvalue + operator;
+            newline = false;
+        }
+
+        function btnACpressed() {
+            document.getElementById("inputbox").value = 0;
+            newline = true;
+        }
+
+        function btnSqrtPressed() {
+            var value = parseFloat(document.getElementById("inputbox").value);
+            if (value >= 0) {
+                document.getElementById("inputbox").value = Math.sqrt(value);
+                newline = true;
+            } else {
+                document.getElementById("inputbox").value = "Error";
+                newline = true;
+            }
+        }
+
+        function bracketBtnPressed() {
+            var bracket = bracketToggle ? "(" : ")";
+            bracketToggle = !bracketToggle;
+            digitBtnPressed(bracket);
+        }
+
+        function equalsBtnPressed() {
+            try {
+                var expression = document.getElementById("inputbox").value;
+
+                // Replace % with division
+                expression = expression.replace(/(\d+)%/g, '($1/100)');
+
+                var result = eval(expression);
+                document.getElementById("inputbox").value = result;
+                newline = true;
+            } catch (e) {
+                document.getElementById("inputbox").value = "Error";
+                newline = true;
+            }
+        }
+    </script>
+</body>
+</html>
+
+
